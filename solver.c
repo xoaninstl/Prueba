@@ -21,7 +21,7 @@ int	count_visible_boxes(int line[4])
 	return (visible_count);
 }
 
-int	check_all_views(int grid[4][4], int views[16])
+static int	check_col_views(int grid[4][4], int views[16])
 {
 	int	i;
 	int	line[4];
@@ -42,6 +42,14 @@ int	check_all_views(int grid[4][4], int views[16])
 		if (count_visible_boxes(line) != views[4 + i])
 			return (0);
 	}
+	return (1);
+}
+
+static int	check_row_views(int grid[4][4], int views[16])
+{
+	int	i;
+	int	line[4];
+
 	i = -1;
 	while (++i < 4)
 	{
@@ -58,6 +66,15 @@ int	check_all_views(int grid[4][4], int views[16])
 		if (count_visible_boxes(line) != views[12 + i])
 			return (0);
 	}
+	return (1);
+}
+
+int	check_all_views(int grid[4][4], int views[16])
+{
+	if (!check_col_views(grid, views))
+		return (0);
+	if (!check_row_views(grid, views))
+		return (0);
 	return (1);
 }
 
@@ -82,9 +99,7 @@ int	solve(int grid[4][4], int views[16], int pos)
 	int	num;
 
 	if (pos == 16)
-	{
 		return (check_all_views(grid, views));
-	}
 	row = pos / 4;
 	col = pos % 4;
 	num = 1;
